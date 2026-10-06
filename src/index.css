@@ -1,0 +1,107 @@
+@import "@fontsource-variable/outfit/index.css";
+@import "@fontsource-variable/plus-jakarta-sans/index.css";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource/geist-mono/400.css";
+@import "@fontsource/geist-mono/500.css";
+@import "lenis/dist/lenis.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Tokens. --accent and --accent2 belong to the product being shown:
+   violet and orchid for Selika Beauty, azure and sky for Selika Dev.
+   ------------------------------------------------------------------ */
+:root {
+  --accent: 139 124 255;
+  --accent2: 176 124 255;
+  --night: 5 6 10;
+  --nav-h: 4.5rem;
+  color-scheme: dark;
+}
+:root[data-product="dev"] {
+  --accent: 77 141 255;
+  --accent2: 142 197 255;
+}
+
+html { background: #05060a; scroll-padding-top: var(--nav-h); -webkit-text-size-adjust: 100%; }
+body {
+  @apply font-body text-ink antialiased;
+  background: transparent;
+  font-feature-settings: "ss01", "cv11";
+  overflow-x: clip;
+}
+::selection { background: rgb(var(--accent) / 0.35); color: #fff; }
+img, svg, canvas { display: block; }
+button { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid rgb(var(--accent2)); outline-offset: 3px; border-radius: 10px; }
+
+/* ---------------- type ---------------- */
+.h-display { @apply font-display font-semibold; letter-spacing: -0.045em; line-height: 0.92; }
+.h-section { @apply font-display font-semibold; letter-spacing: -0.04em; line-height: 0.98; }
+.h-card { @apply font-display font-medium; letter-spacing: -0.02em; }
+/* the italic accent word inside a headline */
+.accent-word { @apply font-serif italic font-normal; letter-spacing: -0.01em; color: rgb(var(--accent2)); transition: color .9s cubic-bezier(.16,1,.3,1); padding-right: 0.06em; }
+.eyebrow { @apply font-mono text-[0.68rem] uppercase text-mute; letter-spacing: 0.16em; }
+.body-lg { @apply text-[clamp(1rem,1.15vw+0.6rem,1.2rem)] leading-relaxed text-mute; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------
+   Glass. One material everywhere: a faint white fill, a hairline rim,
+   a lit top edge and a 16px backdrop blur. Chromium also gets an SVG
+   lens on the few elements marked .sg-lens (see GlassFilters).
+   ------------------------------------------------------------------ */
+.sg-glass {
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 0 22px rgba(255, 255, 255, 0.035),
+    0 18px 40px -18px rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+}
+.sg-glass-strong { background: rgba(14, 16, 26, 0.62); }
+.sg-glass-solid {
+  background: rgba(12, 14, 22, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+}
+html.sg-refract .sg-lens { -webkit-backdrop-filter: url(#sg-lens) blur(1.5px) saturate(160%); backdrop-filter: url(#sg-lens) blur(1.5px) saturate(160%); }
+html.sg-refract .sg-ripple { backdrop-filter: url(#sg-refract) blur(2px) saturate(150%); }
+@media (prefers-reduced-transparency: reduce) {
+  .sg-glass, .sg-glass-strong { background: rgba(14, 16, 26, 0.94); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* phones: blur is the most expensive thing on the page, so glass goes mostly opaque there */
+@media (pointer: coarse) {
+  .sg-glass { background: rgba(20, 22, 34, 0.72); -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%); }
+}
+
+/* the solid accent button */
+.btn-accent { background: rgb(var(--accent)); color: #fff; transition: background-color .9s cubic-bezier(.16,1,.3,1), transform .25s cubic-bezier(.16,1,.3,1); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 30px -10px rgb(var(--accent) / .7); }
+.dot-accent { background: rgb(var(--accent2)); transition: background-color .9s cubic-bezier(.16,1,.3,1); }
+
+/* hairline viewport frame with markers, in the manner of a HUD */
+.hairline { background: rgba(255, 255, 255, 0.07); }
+
+/* layout */
+.wrap { @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12; }
+
+/* reduced motion: anything that loops politely stops */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
+
+/* a quiet scrollbar */
+@media (pointer: fine) {
+  html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.18) transparent; }
+}
+
+/* keyframes used by small UI pieces */
+@keyframes pulse-ring { 0% { transform: scale(.8); opacity: .7 } 100% { transform: scale(2.2); opacity: 0 } }
+@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes caret { 50% { opacity: 0 } }
