@@ -1,0 +1,236 @@
+@import "@fontsource-variable/outfit/index.css";
+@import "@fontsource-variable/plus-jakarta-sans/index.css";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource/geist-mono/400.css";
+@import "@fontsource/geist-mono/500.css";
+@import "lenis/dist/lenis.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Tokens. --accent and --accent2 belong to the product being shown:
+   violet and orchid for Selika Beauty, azure and sky for Selika Dev.
+   ------------------------------------------------------------------ */
+:root {
+  --accent: 139 124 255;
+  --accent2: 176 124 255;
+  --night: 5 6 10;
+  --nav-h: 4.5rem;
+  color-scheme: dark;
+}
+:root[data-product="dev"] {
+  --accent: 77 141 255;
+  --accent2: 142 197 255;
+}
+
+html { background: #05060a; scroll-padding-top: var(--nav-h); -webkit-text-size-adjust: 100%; }
+body {
+  @apply font-body text-ink antialiased;
+  background: transparent;
+  font-feature-settings: "ss01", "cv11";
+  overflow-x: clip;
+}
+::selection { background: rgb(var(--accent) / 0.35); color: #fff; }
+img, svg, canvas { display: block; }
+button { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid rgb(var(--accent2)); outline-offset: 3px; border-radius: 10px; }
+
+/* ---------------- type ---------------- */
+.h-display { @apply font-display font-semibold; letter-spacing: -0.045em; line-height: 0.92; }
+.h-section { @apply font-display font-semibold; letter-spacing: -0.04em; line-height: 0.98; }
+.h-card { @apply font-display font-medium; letter-spacing: -0.02em; }
+/* the italic accent word inside a headline */
+.accent-word { @apply font-serif italic font-normal; letter-spacing: -0.01em; color: rgb(var(--accent2)); transition: color .9s cubic-bezier(.16,1,.3,1); padding-right: 0.06em; }
+.eyebrow { @apply font-mono text-[0.68rem] uppercase text-mute; letter-spacing: 0.16em; }
+.body-lg { @apply text-[clamp(1rem,1.15vw+0.6rem,1.2rem)] leading-relaxed text-mute; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------
+   Glass. One material everywhere: a faint white fill, a hairline rim,
+   a lit top edge and a 16px backdrop blur. Chromium also gets an SVG
+   lens on the few elements marked .sg-lens (see GlassFilters).
+   ------------------------------------------------------------------ */
+.sg-glass {
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 0 22px rgba(255, 255, 255, 0.035),
+    0 18px 40px -18px rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+}
+.sg-glass-strong { background: rgba(14, 16, 26, 0.62); }
+.sg-glass-solid {
+  background: rgba(12, 14, 22, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+}
+html.sg-refract .sg-lens { -webkit-backdrop-filter: url(#sg-lens) blur(1.5px) saturate(160%); backdrop-filter: url(#sg-lens) blur(1.5px) saturate(160%); }
+html.sg-refract .sg-ripple { backdrop-filter: url(#sg-refract) blur(2px) saturate(150%); }
+@media (prefers-reduced-transparency: reduce) {
+  .sg-glass, .sg-glass-strong { background: rgba(14, 16, 26, 0.94); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* ------------------------------------------------------------------
+   Liquid glass: nearly clear in the middle, bent at the rim (Chromium's SVG
+   lens), a bright specular edge top-left, a tinted caustic along the bottom,
+   and a highlight that follows the pointer (--mx, --my set from script).
+   ------------------------------------------------------------------ */
+.lg-glass {
+  position: relative;
+  isolation: isolate;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 0 -0.5px rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 12px 22px -16px rgba(255, 255, 255, 0.35),
+    inset 0 -16px 26px -18px rgb(var(--accent2) / 0.45),
+    0 22px 50px -22px rgba(0, 0, 0, 0.8),
+    0 2px 8px rgba(0, 0, 0, 0.22);
+  -webkit-backdrop-filter: blur(7px) saturate(185%) brightness(1.08);
+  backdrop-filter: blur(7px) saturate(185%) brightness(1.08);
+}
+html.sg-refract .lg-glass { -webkit-backdrop-filter: url(#lg-lens) blur(3px) saturate(185%) brightness(1.08); backdrop-filter: url(#lg-lens) blur(3px) saturate(185%) brightness(1.08); }
+.lg-glass-dark { background: rgba(10, 12, 22, 0.42); }
+.lg-glass-deep { background: rgba(10, 12, 22, 0.6); }
+/* the pointer's highlight and a sheen that sweeps across on hover (blurred shapes, not gradients) */
+.lg-spec { position: absolute; left: var(--mx, 30%); top: var(--my, 20%); width: 9rem; height: 6rem; translate: -50% -50%; border-radius: 9999px; background: rgba(255, 255, 255, 0.16); filter: blur(22px); pointer-events: none; z-index: -1; opacity: 0.55; transition: opacity .4s ease; }
+.lg-sheen { position: absolute; inset: -40% auto -40% -30%; width: 22%; background: rgba(255, 255, 255, 0.16); filter: blur(10px); transform: translateX(-120%) rotate(18deg); pointer-events: none; z-index: -1; opacity: 0; }
+@media (hover: hover) {
+  .lg-glass:hover .lg-spec { opacity: 1; }
+  .lg-glass:hover .lg-sheen { animation: lg-sweep 1.1s cubic-bezier(.16, 1, .3, 1) both; }
+}
+@keyframes lg-sweep { 0% { transform: translateX(-120%) rotate(18deg); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateX(620%) rotate(18deg); opacity: 0; } }
+@media (prefers-reduced-transparency: reduce) { .lg-glass { background: rgba(14, 16, 26, 0.94); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+/* phones: blur is the most expensive thing on the page, so glass goes mostly opaque there */
+@media (pointer: coarse) {
+  .sg-glass { background: rgba(20, 22, 34, 0.72); -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%); }
+}
+
+/* the solid accent button */
+.btn-accent { background: rgb(var(--accent)); color: #fff; transition: background-color .9s cubic-bezier(.16,1,.3,1), transform .25s cubic-bezier(.16,1,.3,1), box-shadow .35s cubic-bezier(.16,1,.3,1); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 30px -10px rgb(var(--accent) / .7); }
+@media (hover: hover) { .btn-accent:not(:disabled):hover { box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 14px 38px -8px rgb(var(--accent) / .95), 0 0 0 4px rgb(var(--accent) / .18); } }
+
+/* ------------------------------------------------------------------
+   Every button answers the pointer: a small lift on hover, a press on
+   click. Buttons that move by other means (springs, flips) opt out
+   with .no-press or by carrying their own inline transform.
+   ------------------------------------------------------------------ */
+button:not(.no-press) { transition-property: transform, background-color, border-color, color, box-shadow, opacity, outline-color; transition-duration: .28s; transition-timing-function: cubic-bezier(.16,1,.3,1); }
+@media (hover: hover) { button:not(.no-press):not(:disabled):hover { transform: translateY(-1.5px); } }
+button:not(.no-press):not(:disabled):active { transform: translateY(0) scale(.95); transition-duration: .09s; }
+/* icons that act out what the button does */
+.icon-nudge { transition: transform .35s cubic-bezier(.16,1,.3,1); }
+@media (hover: hover) { button:hover .icon-nudge { transform: translateX(3px); } button:hover .icon-spin { transform: rotate(-120deg); } }
+.icon-spin { transition: transform .55s cubic-bezier(.16,1,.3,1); }
+
+/* arrive and settle (see Reveal) */
+.reveal { opacity: 0; transform: translate3d(0, var(--ry, 22px), 0); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); }
+.reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* a tile that lifts its rim and light when the pointer is over it */
+.tile-hover { transition: background-color .4s cubic-bezier(.16,1,.3,1), border-color .4s cubic-bezier(.16,1,.3,1), box-shadow .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1); }
+@media (hover: hover) {
+  .tile-hover:hover { background: rgba(255, 255, 255, 0.085); border-color: rgb(var(--accent2) / .38); box-shadow: inset 0 1px 0 rgba(255,255,255,.34), 0 0 0 1px rgb(var(--accent2) / .12), 0 22px 50px -20px rgb(var(--accent) / .45); transform: translateY(-3px); }
+}
+.dot-accent { background: rgb(var(--accent2)); transition: background-color .9s cubic-bezier(.16,1,.3,1); }
+
+/* hairline viewport frame with markers, in the manner of a HUD */
+.hairline { background: rgba(255, 255, 255, 0.07); }
+
+/* layout */
+.wrap { @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12; }
+
+/* reduced motion: anything that loops politely stops */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
+
+/* a quiet scrollbar */
+@media (pointer: fine) {
+  html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.18) transparent; }
+}
+
+/* keyframes used by small UI pieces */
+@keyframes pulse-ring { 0% { transform: scale(.8); opacity: .7 } 100% { transform: scale(2.2); opacity: 0 } }
+@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes caret { 50% { opacity: 0 } }
+
+/* the comparison table: Selika's column glows, its checks arrive row by row once in view */
+.cmp .cmp-sel { background: rgb(var(--accent) / .08); box-shadow: inset 1px 0 0 rgb(var(--accent2) / .35), inset -1px 0 0 rgb(var(--accent2) / .35); transition: background-color .9s cubic-bezier(.16,1,.3,1); }
+.cmp thead .cmp-sel { box-shadow: inset 1px 0 0 rgb(var(--accent2) / .35), inset -1px 0 0 rgb(var(--accent2) / .35), inset 0 1px 0 rgb(var(--accent2) / .35); }
+.cmp-row { transition: background-color .3s ease; }
+@media (hover: hover) { .cmp-row:hover { background: rgba(255,255,255,.03); } }
+.cmp-pop { transform: scale(.4); opacity: 0; transition: transform .6s cubic-bezier(.34,1.56,.64,1), opacity .4s ease; transition-delay: calc(.25s + var(--i, 0) * .14s); }
+.is-in .cmp-pop { transform: none; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .cmp-pop { transform: none; opacity: 1; } }
+
+/* switches: the knob springs across */
+.toggle-knob { transition: transform .32s cubic-bezier(.22,1,.36,1); }
+/* the drag hint breathes, and its arrows sway */
+.drag-hint { animation: hint-glow 2.4s ease-in-out infinite; box-shadow: 0 0 0 1px rgb(var(--accent2) / .35); }
+.drag-hint-arrows { animation: hint-sway 1.6s ease-in-out infinite; }
+@keyframes hint-glow { 0%, 100% { box-shadow: 0 0 0 1px rgb(var(--accent2) / .3), 0 0 0 0 rgb(var(--accent2) / .0); } 50% { box-shadow: 0 0 0 1px rgb(var(--accent2) / .7), 0 0 26px 2px rgb(var(--accent2) / .35); } }
+@keyframes hint-sway { 0%, 100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+
+/* the bubble card's button: noticed on arrival with two soft rings */
+.detail-btn { animation: detail-pulse 1.6s cubic-bezier(.16,1,.3,1) .35s 2 both; }
+@keyframes detail-pulse { 0% { box-shadow: 0 0 0 0 rgb(var(--accent2) / .55); } 100% { box-shadow: 0 0 0 12px rgb(var(--accent2) / 0); } }
+@media (prefers-reduced-motion: reduce) { .detail-btn { animation: none; } }
+
+/* ------------------------------------------------------------------
+   The "only a mirror" visuals (CSS only)
+   ------------------------------------------------------------------ */
+.om-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: om-draw 7s cubic-bezier(.45, 0, .2, 1) var(--d, 0s) infinite both; filter: drop-shadow(0 0 5px rgb(var(--accent2) / .9)); }
+@keyframes om-draw { 0% { stroke-dashoffset: 1; opacity: 1; } 20% { stroke-dashoffset: 0; } 78% { stroke-dashoffset: 0; opacity: 1; } 90%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+.om-dot { transform-box: fill-box; transform-origin: center; animation: om-dot 7s cubic-bezier(.16, 1, .3, 1) var(--d, 0s) infinite both; filter: drop-shadow(0 0 6px rgb(var(--accent2))); }
+@keyframes om-dot { 0% { opacity: 0; transform: scale(.3); } 9% { opacity: 1; transform: scale(1); } 78% { opacity: 1; transform: scale(1); } 90%, 100% { opacity: 0; transform: scale(.6); } }
+.om-scan { top: 0; background: rgb(var(--accent2) / .22); filter: blur(10px); mix-blend-mode: screen; animation: om-scan 3.8s cubic-bezier(.45, 0, .55, 1) infinite; }
+@keyframes om-scan { 0% { transform: translateY(-110%); } 100% { transform: translateY(560%); } }
+
+.om-ring { animation: om-ring 10s linear infinite; }
+@keyframes om-ring {
+  0%, 100% { box-shadow: 0 0 0 2px #ffb46b, 0 0 34px 2px rgba(255, 180, 107, .55); }
+  20% { box-shadow: 0 0 0 2px #ffc992, 0 0 34px 2px rgba(255, 201, 146, .5); }
+  40% { box-shadow: 0 0 0 2px #ffe2c2, 0 0 34px 2px rgba(255, 226, 194, .45); }
+  60% { box-shadow: 0 0 0 2px #f4f0ff, 0 0 34px 2px rgba(244, 240, 255, .45); }
+  80% { box-shadow: 0 0 0 2px #d6e4ff, 0 0 34px 2px rgba(214, 228, 255, .5); }
+}
+.om-tint { animation: om-tint 10s linear infinite; opacity: .55; }
+@keyframes om-tint { 0%, 100% { background: #ff9a4a; } 20% { background: #ffbe80; } 40% { background: #ffe2c2; } 60% { background: #f4f0ff; } 80% { background: #b9d0ff; } }
+.om-k { opacity: 0; animation: om-k 10s cubic-bezier(.16, 1, .3, 1) calc(var(--i) * 2s) infinite both; }
+@keyframes om-k { 0% { opacity: 0; transform: translateY(70%); } 4% { opacity: 1; transform: none; } 17% { opacity: 1; transform: none; } 21%, 100% { opacity: 0; transform: translateY(-70%); } }
+
+.om-ghost { opacity: 0; animation: om-ghost 8s cubic-bezier(.16, 1, .3, 1) calc(var(--i) * 2.66s) infinite both; }
+@keyframes om-ghost { 0% { opacity: 0; transform: translate(16%, -7%) rotate(7deg) scale(1.14); } 6% { opacity: .75; } 24% { opacity: 1; transform: none; } 30% { opacity: 1; transform: none; } 40%, 100% { opacity: 0; transform: none; } }
+.om-day { animation: om-day 8s ease calc(var(--i) * 2s) infinite both; }
+@keyframes om-day { 0%, 28%, 100% { background: rgba(0, 0, 0, .55); color: rgb(240 242 255 / .6); } 4%, 22% { background: rgb(var(--accent)); color: #fff; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .om-draw { animation: none; stroke-dashoffset: 0; }
+  .om-dot, .om-k:first-child { animation: none; opacity: 1; }
+  .om-scan, .om-ghost, .om-day, .om-ring, .om-tint, .om-k { animation: none; }
+  .om-ring { box-shadow: 0 0 0 2px #f4f0ff, 0 0 34px 2px rgba(244, 240, 255, .45); }
+}
+
+/* the first module wears the drag hint until something is moved */
+.drag-me { animation: drag-me 1.8s cubic-bezier(.16, 1, .3, 1) .9s infinite; }
+@keyframes drag-me { 0% { box-shadow: 0 0 0 0 rgb(var(--accent2) / .55); } 70%, 100% { box-shadow: 0 0 0 12px rgb(var(--accent2) / 0); } }
+@media (prefers-reduced-motion: reduce) { .drag-me { animation: none; } }
+
+/* Reactive cards: rim, fill and a pointer light on hover (see Reactive in ui.tsx) */
+.rc { transition: border-color .35s ease, box-shadow .35s ease, background-color .35s ease; }
+.rc-glow { position: absolute; left: var(--mx, 50%); top: var(--my, 50%); width: 18rem; height: 18rem; translate: -50% -50%; border-radius: 9999px; background: rgb(var(--accent2) / .16); filter: blur(44px); opacity: 0; transition: opacity .45s ease; pointer-events: none; z-index: -1; }
+@media (hover: hover) {
+  .rc:hover { border-color: rgb(var(--accent2) / .5); background-color: rgba(255, 255, 255, .075); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .32), 0 0 0 1px rgb(var(--accent2) / .22), 0 26px 60px -24px rgb(var(--accent) / .65); }
+  .rc:hover .rc-glow { opacity: 1; }
+}
