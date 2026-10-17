@@ -1,0 +1,12 @@
+{
+  "name": "selika",
+  "short_name": "selika",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#05060A",
+  "background_color": "#05060A",
+  "display": "standalone",
+  "start_url": "/"
+}
